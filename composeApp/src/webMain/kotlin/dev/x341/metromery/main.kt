@@ -1,4 +1,4 @@
-package dev.x341.metromery = ComposeUIViewController { App() } = ComposeUIViewController { App() }
+package dev.x341.metromery
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport

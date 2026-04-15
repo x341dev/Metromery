@@ -5,6 +5,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import dev.x341.metromery.screen.HomeScreen
+import dev.x341.metromery.screen.SettingsScreen
 
 @Composable
 fun NavigationWrapper() {
@@ -15,12 +16,12 @@ fun NavigationWrapper() {
         entryProvider = entryProvider {
             entry<Route.Home> {
                 HomeScreen(
-                    onNavigateSettings = { backStack.add(Route.Settings(id = "test")) }
+                    onNavigateSettings = { backStack.add(Route.Settings(id = "test")) },
                 )
             }
 
-            entry<Route.Settings> {
-                SettingScreen(onNavigateBack = { backStack.removeLastOrNull() })
+            entry<Route.Settings> { key ->
+                SettingsScreen(id = key.id, onNavigateBack = { backStack.removeLastOrNull() })
             }
         }
     )
