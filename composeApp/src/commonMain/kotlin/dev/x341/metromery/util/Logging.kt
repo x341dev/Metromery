@@ -1,4 +1,4 @@
-package dev.x341.metromery.Util
+package dev.x341.metromery.util
 
 import io.github.aakira.napier.Napier
 
