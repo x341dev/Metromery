@@ -20,19 +20,19 @@ import dev.x341.metromery.MetromeryViewModel
 
 @Composable
 fun HomeScreen(
-    onNavigateSettings : () -> Unit
+    onNavigateToGame : () -> Unit,
+    viewModel: MetromeryViewModel
 ) {
-    val vm: MetromeryViewModel = viewModel { MetromeryViewModel() }
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center)
     {
         Text("Home Screen", style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(24.dp))
-        Button(onClick = onNavigateSettings) { Text("Go to Settings") }
+        Button(onClick = onNavigateToGame) { Text("Go to Game") }
 
         Spacer(Modifier.height(24.dp))
-        Button(onClick = { vm.modifyShowMessage() }) { Text("Toggle Message") }
+        Button(onClick = { viewModel.modifyShowMessage() }) { Text("Toggle Message") }
         Spacer(Modifier.height(12.dp))
-        AnimatedVisibility(vm.showMessage) {
+        AnimatedVisibility(viewModel.showMessage) {
             Text("Hello World!", fontSize = 32.sp, fontWeight = FontWeight.Bold)
         }
     }
