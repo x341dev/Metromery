@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.core)
             implementation(libs.napier)
             implementation(libs.napier)
+            implementation(libs.coil.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
