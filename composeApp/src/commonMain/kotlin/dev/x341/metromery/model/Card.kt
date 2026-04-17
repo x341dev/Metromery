@@ -7,7 +7,8 @@ data class Card (
     val id: Int,
     val name: String,
     val imagePath: DrawableResource?,
-    val difficulty: Int = 1
+    val difficulty: Int = 1,
+    var isFlipped: Boolean = true
 )
 
 object CardRepository {

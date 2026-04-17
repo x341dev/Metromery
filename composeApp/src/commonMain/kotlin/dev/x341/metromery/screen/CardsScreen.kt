@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,9 +20,11 @@ import dev.x341.metromery.component.CardComponent
 fun CardsScreen(
     viewModel: MetromeryViewModel
 ) {
+    val flippedStates = remember { mutableStateMapOf<Int, Boolean>() }
+
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyVerticalGrid(
@@ -31,7 +35,12 @@ fun CardsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(viewModel.cards) { card ->
-                CardComponent(card = card, initialFlipped = false)
+                val isFlipped = flippedStates[card.id] ?: false
+                CardComponent(
+                    card = card,
+                    isFlipped = isFlipped,
+                    onClick = { flippedStates[card.id] = !isFlipped }
+                )
             }
         }
     }

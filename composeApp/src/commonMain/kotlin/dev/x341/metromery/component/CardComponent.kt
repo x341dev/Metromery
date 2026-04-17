@@ -10,10 +10,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,23 +20,23 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CardComponent(
     card: Card,
-    initialFlipped: Boolean = true
+    isFlipped: Boolean,
+    onClick: () -> Unit
 ) {
-    var flipped by remember { mutableStateOf(initialFlipped) }
+    val painter = card.imagePath?.let { painterResource(it) }
 
     Card(
-        colors = if (flipped) CardDefaults.cardColors(
+        colors = if (isFlipped) CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
         ) else CardDefaults.cardColors(),
-        modifier = Modifier.clip(RoundedCornerShape(8.dp)).size(100.dp, 150.dp),
-        onClick = { flipped = !flipped },
+        modifier = Modifier.clip(RoundedCornerShape(8.dp)).size(75.dp, 100.dp),
+        onClick = onClick,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            if (!flipped) {
-                val painter = card.imagePath?.let { painterResource(it) }
+            if (!isFlipped) {
                 if (painter != null) {
                     Image(
                         painter = painter,

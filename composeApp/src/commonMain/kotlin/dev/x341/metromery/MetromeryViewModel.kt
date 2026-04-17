@@ -6,8 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.x341.metromery.model.Card
 import dev.x341.metromery.model.CardRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.collections.emptyList
 
 class MetromeryViewModel : ViewModel() {
@@ -20,6 +23,16 @@ class MetromeryViewModel : ViewModel() {
     var showMessage by mutableStateOf(false)
         private set
 
+    var attemps by mutableStateOf(0)
+        private set
+
+    var isGameWon by mutableStateOf(false)
+        private set
+
+    private var firstCardIndex: Int? = null
+    private var isProcessing = false
+
+
     fun modifyShowMessage() {
         showMessage = !showMessage
     }
@@ -31,10 +44,49 @@ class MetromeryViewModel : ViewModel() {
     }
 
     fun selectRandomCards() {
+        attemps = 0
+        isGameWon = false
+        firstCardIndex = null
+        isProcessing = false
         selectedCards.clear()
-        val mappedCards = cards.filter { it.difficulty == difficulty }.take(difficulty * 3)
+
+        val mappedCards = cards.shuffled().take(difficulty * 3)
         var gameCards = mappedCards + mappedCards
         gameCards = gameCards.shuffled()
-        selectedCards.addAll(gameCards)
+        selectedCards.addAll(gameCards.map { it.copy(isFlipped = true) })
+    }
+
+    fun flipCard(index: Int) {
+        if (isProcessing) return
+        val card = selectedCards[index]
+        if (!card.isFlipped) return
+
+        selectedCards[index] = card.copy(isFlipped = false)
+
+        if (firstCardIndex == null) {
+            firstCardIndex = index
+        } else {
+            val firstIndex = firstCardIndex!!
+            val firstCard = selectedCards[firstIndex]
+
+            attemps++
+
+            if (firstCard.id == card.id) {
+                firstCardIndex = null
+
+                if (selectedCards.none() { it.isFlipped }) {
+                    isGameWon = true
+                }
+            } else {
+                isProcessing = true
+                viewModelScope.launch {
+                    delay(1000)
+                    selectedCards[firstIndex] = selectedCards[firstIndex].copy(isFlipped = true)
+                    selectedCards[index] = selectedCards[index].copy(isFlipped = true)
+                    firstCardIndex = null
+                    isProcessing = false
+                }
+            }
+        }
     }
 }
