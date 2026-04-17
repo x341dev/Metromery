@@ -9,4 +9,6 @@ sealed class Route : NavKey {
     data object Home : Route()
     @Serializable
     data object Game : Route()
+    @Serializable
+    data object Cards : Route()
 }

@@ -10,6 +10,7 @@ val navConfig = SavedStateConfiguration {
         polymorphic(NavKey::class) {
             subclass(Route.Home::class, Route.Home.serializer())
             subclass(Route.Game::class, Route.Game.serializer())
+            subclass(Route.Cards::class, Route.Cards.serializer())
         }
     }
 }
