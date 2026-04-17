@@ -21,6 +21,7 @@ import dev.x341.metromery.MetromeryViewModel
 @Composable
 fun HomeScreen(
     onNavigateToGame : () -> Unit,
+    onNavigateToCards : () -> Unit,
     viewModel: MetromeryViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center)
@@ -30,10 +31,6 @@ fun HomeScreen(
         Button(onClick = onNavigateToGame) { Text("Go to Game") }
 
         Spacer(Modifier.height(24.dp))
-        Button(onClick = { viewModel.modifyShowMessage() }) { Text("Toggle Message") }
-        Spacer(Modifier.height(12.dp))
-        AnimatedVisibility(viewModel.showMessage) {
-            Text("Hello World!", fontSize = 32.sp, fontWeight = FontWeight.Bold)
-        }
+        Button(onClick = onNavigateToCards) { Text("See all cards") }
     }
 }
