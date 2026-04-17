@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.napier)
             implementation(libs.napier)
             implementation(libs.coil.compose)
+            implementation(libs.navigation.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
