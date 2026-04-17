@@ -1,28 +1,16 @@
 package dev.x341.metromery
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import dev.x341.metromery.navigation.NavigationWrapper
-import org.jetbrains.compose.resources.painterResource
-
-import metromery.composeapp.generated.resources.Res
-import metromery.composeapp.generated.resources.compose_multiplatform
+import dev.x341.metromery.theme.MetromeryTheme
 
 @Composable
 fun App() {
-    MaterialTheme {
-        NavigationWrapper()
+    var isDarkMode by remember { mutableStateOf(false) }
+    MetromeryTheme(darkTheme = isDarkMode) {
+        NavigationWrapper(
+            isDarkMode = isDarkMode,
+            onToggleDarkMode = { isDarkMode = !isDarkMode }
+        )
     }
 }
