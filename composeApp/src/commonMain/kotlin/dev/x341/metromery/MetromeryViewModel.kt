@@ -32,9 +32,9 @@ class MetromeryViewModel : ViewModel() {
 
     fun selectRandomCards() {
         selectedCards.clear()
-        val mappedCards = cards.filter { it.difficulty == difficulty }.shuffled()
-        selectedCards.addAll(mappedCards.take(difficulty * 4))
+        val mappedCards = cards.filter { it.difficulty == difficulty }.take(difficulty * 3)
+        var gameCards = mappedCards + mappedCards
+        gameCards = gameCards.shuffled()
+        selectedCards.addAll(gameCards)
     }
-
-
 }
