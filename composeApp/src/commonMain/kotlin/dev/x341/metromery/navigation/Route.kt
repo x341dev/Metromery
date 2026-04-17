@@ -1,7 +1,6 @@
 package dev.x341.metromery.navigation
 
 import androidx.navigation3.runtime.NavKey
-import dev.x341.metromery.MetromeryViewModel
 import kotlinx.serialization.Serializable
 
 sealed class Route : NavKey {
@@ -11,4 +10,6 @@ sealed class Route : NavKey {
     data object Game : Route()
     @Serializable
     data object Cards : Route()
+    @Serializable
+    data object Settings : Route()
 }

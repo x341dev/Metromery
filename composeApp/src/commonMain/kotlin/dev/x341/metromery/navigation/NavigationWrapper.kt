@@ -17,16 +17,15 @@ import dev.x341.metromery.screen.HomeScreen
 import dev.x341.metromery.screen.SettingsScreen
 
 @Composable
-fun NavigationWrapper() {
+fun NavigationWrapper(
+    isDarkMode: Boolean,
+    onToggleDarkMode: () -> Unit
+) {
     val sharedViewModel = viewModel { MetromeryViewModel() }
     val backStack = rememberNavBackStack(navConfig, Route.Home)
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
-        ) {
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
             NavDisplay(
                 backStack = backStack,
                 onBack = { backStack.removeLastOrNull() },
@@ -35,16 +34,22 @@ fun NavigationWrapper() {
                         HomeScreen(
                             onNavigateToGame = { backStack.add(Route.Game) },
                             onNavigateToCards = { backStack.add(Route.Cards) },
+                            onNavigateToSettings = { backStack.add(Route.Settings) },
                             viewModel = sharedViewModel
                         )
                     }
-
                     entry<Route.Game> {
                         GameScreen(viewModel = sharedViewModel)
                     }
-
                     entry<Route.Cards> {
                         CardsScreen(viewModel = sharedViewModel)
+                    }
+                    entry<Route.Settings> {
+                        SettingsScreen(
+                            isDarkMode = isDarkMode,
+                            onToggleDarkMode = onToggleDarkMode,
+                            onNavigateBack = { backStack.removeLastOrNull() }
+                        )
                     }
                 }
             )
