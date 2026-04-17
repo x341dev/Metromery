@@ -39,7 +39,10 @@ fun NavigationWrapper(
                         )
                     }
                     entry<Route.Game> {
-                        GameScreen(viewModel = sharedViewModel)
+                        GameScreen(
+                            viewModel = sharedViewModel,
+                            onNavigateBack = { backStack.removeLastOrNull() }
+                        )
                     }
                     entry<Route.Cards> {
                         CardsScreen(viewModel = sharedViewModel)
