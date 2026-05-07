@@ -62,6 +62,10 @@ kotlin {
             implementation(libs.napier)
             implementation(libs.coil.compose)
             implementation(libs.navigation.compose)
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
