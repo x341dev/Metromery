@@ -39,7 +39,7 @@ class MetromeryViewModel(private val settings: Settings) : ViewModel() {
     }
 
     fun modifyDifficulty(newDifficulty: Int) {
-        if (newDifficulty in 1..3) {
+        if (newDifficulty in 1..4) {
             difficulty = newDifficulty
             settings.putInt("difficulty", newDifficulty)
         }
