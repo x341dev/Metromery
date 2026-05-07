@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.russhwolf.settings.Settings
@@ -12,7 +11,6 @@ import dev.x341.metromery.model.Card
 import dev.x341.metromery.model.CardRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.collections.emptyList
 
 class MetromeryViewModel(private val settings: Settings) : ViewModel() {
     var difficulty by mutableStateOf(settings.getInt("difficulty", 1))
@@ -20,9 +18,6 @@ class MetromeryViewModel(private val settings: Settings) : ViewModel() {
 
     val cards = CardRepository.cards
     val selectedCards = mutableStateListOf<Card>()
-
-    var showMessage by mutableStateOf(false)
-        private set
 
     var attemps by mutableStateOf(0)
         private set
@@ -32,11 +27,6 @@ class MetromeryViewModel(private val settings: Settings) : ViewModel() {
 
     private var firstCardIndex: Int? = null
     private var isProcessing = false
-
-
-    fun modifyShowMessage() {
-        showMessage = !showMessage
-    }
 
     fun modifyDifficulty(newDifficulty: Int) {
         if (newDifficulty in 1..4) {
