@@ -24,38 +24,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.x341.metromery.MetromeryViewModel
+import dev.x341.metromery.component.MetromeryLayout
 
 @Composable
 fun SettingsScreen(
+    viewModel: MetromeryViewModel,
     isDarkMode: Boolean,
     onToggleDarkMode: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(horizontal = 8.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    MetromeryLayout(
+        viewModel = viewModel,
+        title = "Settings",
+        topBarActions = {
             IconButton(onClick = onNavigateBack) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
                     contentDescription = "Back",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
-            Text(
-                text = "Settings",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
         }
-
-        // Content
-        Column(
+    ) {
+    Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),

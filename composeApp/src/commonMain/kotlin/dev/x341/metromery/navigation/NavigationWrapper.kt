@@ -47,10 +47,14 @@ fun NavigationWrapper(
                         )
                     }
                     entry<Route.Cards> {
-                        CardsScreen(viewModel = sharedViewModel)
+                        CardsScreen(
+                            viewModel = sharedViewModel,
+                            onNavigateBack = { backStack.removeLastOrNull() }
+                        )
                     }
                     entry<Route.Settings> {
                         SettingsScreen(
+                            viewModel = sharedViewModel,
                             isDarkMode = isDarkMode,
                             onToggleDarkMode = onToggleDarkMode,
                             onNavigateBack = { backStack.removeLastOrNull() }

@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.x341.metromery.MetromeryViewModel
+import dev.x341.metromery.component.HomeTopBarActions
+import dev.x341.metromery.component.MetromeryLayout
 
 private val ColorEasy = Color(0xFF4CAF50)
 private val ColorNormal = Color(0xFFFFB300)
@@ -47,124 +49,64 @@ fun HomeScreen(
     onNavigateToSettings: () -> Unit,
     viewModel: MetromeryViewModel
 ) {
-    val currentThemeColor = when (viewModel.difficulty) {
-        1 -> ColorEasy
-        2 -> ColorNormal
-        3 -> ColorHard
-        4 -> ColorInsane
-        else -> MaterialTheme.colorScheme.primary
-    }
-
-    Column(modifier = Modifier.fillMaxSize()) {
-
-        // Header banner
-        Box(
+    MetromeryLayout(
+        viewModel = viewModel,
+        title = "Metrometry",
+        topBarActions = { HomeTopBarActions(onNavigateToSettings) }
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(horizontal = 24.dp, vertical = 32.dp)
+                .widthIn(max = 600.dp)
+                .fillMaxSize()
+                .padding(horizontal = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column {
-                Text(
-                    text = "Metromery",
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                Text(
-                    text = "Metro card memory game",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f)
-                )
-            }
-            IconButton(
-                onClick = onNavigateToSettings,
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .background(
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                            shape = CircleShape
-                        ),
-                    contentAlignment = Alignment.Center
+            Text(
+                text = "Select difficulty",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    DifficultyButton(1, "Easy", ColorEasy, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
+                    DifficultyButton(2, "Normal", ColorNormal, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    DifficultyButton(3, "Hard", ColorHard, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
+                    DifficultyButton(4, "Insane", ColorInsane, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
                 }
             }
-        }
 
-        // Main content
-        val dynamicColorScheme = MaterialTheme.colorScheme.copy(
-            primary = currentThemeColor
-        )
+            Spacer(Modifier.height(40.dp))
 
-        MaterialTheme(colorScheme = dynamicColorScheme) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+            Button(
+                onClick = onNavigateToGame,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxSize()
-                        .padding(horizontal = 32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Select difficulty",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                Icon(Icons.Default.PlayArrow, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Play Game", style = MaterialTheme.typography.labelLarge)
+            }
 
-                    Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            DifficultyButton(1, "Easy", ColorEasy, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
-                            DifficultyButton(2, "Normal", ColorNormal, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            DifficultyButton(3, "Hard", ColorHard, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
-                            DifficultyButton(4, "Insane", ColorInsane, viewModel.difficulty, Modifier.weight(1f)) { viewModel.modifyDifficulty(it) }
-                        }
-                    }
-
-                    Spacer(Modifier.height(40.dp))
-
-                    Button(
-                        onClick = onNavigateToGame,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(Icons.Default.PlayArrow, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Play Game", style = MaterialTheme.typography.labelLarge)
-                    }
-
-                    Spacer(Modifier.height(12.dp))
-
-                    FilledTonalButton(
-                        onClick = onNavigateToCards,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(Icons.Default.Style, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Browse Cards", style = MaterialTheme.typography.labelLarge)
-                    }
-                }
+            FilledTonalButton(
+                onClick = onNavigateToCards,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.Style, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Browse Cards", style = MaterialTheme.typography.labelLarge)
             }
         }
     }

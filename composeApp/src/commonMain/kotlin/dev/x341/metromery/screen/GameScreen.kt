@@ -39,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.x341.metromery.MetromeryViewModel
 import dev.x341.metromery.component.CardComponent
+import dev.x341.metromery.component.GameTopBarActions
+import dev.x341.metromery.component.MetromeryLayout
 
 private val difficultyLabel = mapOf(1 to "Easy", 2 to "Normal", 3 to "Hard")
 
@@ -51,109 +53,38 @@ fun GameScreen(
         viewModel.selectRandomCards()
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-
-            // Top bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(horizontal = 8.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-                Text(
-                    text = "Game",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.weight(1f)
-                )
-                Surface(
-                    shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                    modifier = Modifier.padding(end = 8.dp)
-                ) {
-                    Text(
-                        text = difficultyLabel[viewModel.difficulty] ?: "Easy",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                    )
-                }
-                IconButton(onClick = { viewModel.selectRandomCards() }) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Restart",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
-
-            // Attempts counter
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 14.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.TouchApp,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Attempts: ",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = "${viewModel.attemps}",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            // Card grid
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                itemsIndexed(viewModel.selectedCards) { index, card ->
-                    CardComponent(
-                        card = card,
-                        isFlipped = card.isFlipped,
-                        onClick = { viewModel.flipCard(index) }
-                    )
-                }
-            }
-        }
-
-        // Win screen overlay
-        AnimatedVisibility(
-            visible = viewModel.isGameWon,
-            enter = fadeIn(tween(300)) + slideInVertically(tween(400)) { it / 3 },
-            exit = fadeOut() + slideOutVertically { it / 3 }
+    MetromeryLayout(
+        viewModel = viewModel,
+        title = "Game",
+        topBarActions = { GameTopBarActions(viewModel, onNavigateBack) }
+    ) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            WinScreen(
-                attempts = viewModel.attemps,
-                difficulty = viewModel.difficulty,
-                onPlayAgain = { viewModel.selectRandomCards() },
-                onHome = onNavigateBack
-            )
+            itemsIndexed(viewModel.selectedCards) { index, card ->
+                CardComponent(
+                    card = card,
+                    isFlipped = card.isFlipped,
+                    onClick = { viewModel.flipCard(index) }
+                )
+            }
         }
+    }
+
+    AnimatedVisibility(
+        visible = viewModel.isGameWon,
+        enter = fadeIn(tween(300)) + slideInVertically(tween(400)) { it / 3 },
+        exit = fadeOut() + slideOutVertically { it / 3 }
+    ) {
+        WinScreen(
+            attempts = viewModel.attemps,
+            difficulty = viewModel.difficulty,
+            onPlayAgain = { viewModel.selectRandomCards() },
+            onHome = onNavigateBack
+        )
     }
 }
