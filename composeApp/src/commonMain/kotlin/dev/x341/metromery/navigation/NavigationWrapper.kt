@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.russhwolf.settings.Settings
 import dev.x341.metromery.MetromeryViewModel
 import dev.x341.metromery.screen.CardsScreen
 import dev.x341.metromery.screen.GameScreen
@@ -19,9 +20,10 @@ import dev.x341.metromery.screen.SettingsScreen
 @Composable
 fun NavigationWrapper(
     isDarkMode: Boolean,
-    onToggleDarkMode: () -> Unit
+    onToggleDarkMode: () -> Unit,
+    settings: Settings
 ) {
-    val sharedViewModel = viewModel { MetromeryViewModel() }
+    val sharedViewModel = viewModel { MetromeryViewModel(settings) }
     val backStack = rememberNavBackStack(navConfig, Route.Home)
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
